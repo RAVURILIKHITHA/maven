@@ -2,32 +2,37 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven 3.8.6'   // Use exact name as in Jenkins
-        jdk 'JDK 21'          // Use exact name as in Jenkins
+        maven 'maven-3.8.6'
+        jdk 'jdk-17'
     }
 
     stages {
-    
+        stage('Clone Repo') {
+            steps {
+                git 'https://github.com/RAVURILIKHITHA/maven.git'
+            }
+        }
 
         stage('Build') {
             steps {
-                bat 'mvn clean install'
+                sh 'mvn clean install'
             }
         }
 
         stage('Test') {
             steps {
-                bat 'mvn test'
+                sh 'mvn test'
             }
         }
     }
 
     post {
-        failure {
-            echo 'Build or tests failed.'
-        }
         success {
-            echo 'Build and tests succeeded.'
+            echo '✅ Build, Test and Clone Successful'
+        }
+        failure {
+            echo '❌ Failed. Please check the logs.'
         }
     }
 }
+
